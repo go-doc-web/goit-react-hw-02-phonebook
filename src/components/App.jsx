@@ -8,11 +8,11 @@ const INITIAL_STATE = {
 
 const styleApp = {
   // height: '100vh',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  fontSize: 40,
+  // display: 'flex',
+  // flexDirection: 'column',
+  // justifyContent: 'center',
+  // alignItems: 'center',
+  fontSize: 32,
   color: '#010101',
 };
 
@@ -41,11 +41,24 @@ class App extends Component {
     this.setState({ filter: e.target.value });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  dublicate(name) {
+    const { contacts } = this.state;
+    const normalisedName = name.toLocaleLowerCase();
+    const dublContact = contacts.find(
+      ({ name }) => name.toLowerCase() === normalisedName
+    );
+    return Boolean(dublContact);
+  }
 
+  addContact = e => {
+    e.preventDefault();
+    const { name } = this.state;
+    if (this.dublicate(name)) {
+      return alert('Такой пользователь уже есть');
+    }
     this.setState(prevState => {
       const { name, number, contacts } = prevState;
+
       const newContact = {
         id: Math.random(),
         name,
@@ -60,12 +73,16 @@ class App extends Component {
     this.setState({ ...INITIAL_STATE });
   }
 
-  getFilterContact(contacts, filter, name) {
-    return contacts.filter(({ name }) => {
-      const normalisedName = name.toLocaleLowerCase();
-      const normalisedFilter = filter.toLocaleLowerCase();
-      return normalisedName.includes(normalisedFilter);
+  getFilterContact() {
+    const { filter, contacts } = this.state;
+    if (!filter) {
+      return contacts;
+    }
+    const normalizedFilter = filter.toLowerCase();
+    const result = contacts.filter(({ name }) => {
+      return name.toLowerCase().includes(normalizedFilter);
     });
+    return result;
   }
 
   removeContact(id) {
@@ -75,7 +92,7 @@ class App extends Component {
   }
   render() {
     const { contacts, name, number, filter } = this.state;
-    const filterContacts = this.getFilterContact(contacts, filter, name);
+    const filterContacts = this.getFilterContact();
 
     const contact = filterContacts.map(({ id, name, number }) => (
       <li key={id}>
@@ -90,7 +107,7 @@ class App extends Component {
       <div style={styleApp}>
         <div className={css.wrapper}>
           <h2>Phonebook</h2>
-          <form onSubmit={this.handleSubmit} className={css.form}>
+          <form onSubmit={this.addContact} className={css.form}>
             <label>
               <span>Name</span>
               <input
@@ -125,6 +142,7 @@ class App extends Component {
           <input
             onChange={this.handlefilterChange}
             type="text"
+            name="filter"
             value={filter}
           />
           <ul className="list">{contact}</ul>
