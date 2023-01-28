@@ -1,16 +1,13 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
-import css from './App.module.css';
 
 import ContactsList from './ContactsList/ContactList';
 import ContactFilter from './ContactFilter/ContactFilter';
+import ContactsForm from './ContactsForm/ContactsForm';
 
 import contacts from './contacts';
 
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
+import css from './App.module.css';
 
 const styleApp = {
   // height: '100vh',
@@ -26,16 +23,6 @@ class App extends Component {
   state = {
     contacts: [...contacts],
     filter: '',
-    name: '',
-    number: '',
-  };
-
-  handleClickChange = ({ target }) => {
-    const { name, value } = target;
-
-    this.setState({
-      [name]: value,
-    });
   };
 
   handlefilterChange = e => {
@@ -51,15 +38,12 @@ class App extends Component {
     return Boolean(dublContact);
   }
 
-  addContact = e => {
-    e.preventDefault();
-    const { name } = this.state;
+  addContact = ({ name, number }) => {
     if (this.dublicate(name)) {
-      this.reset();
       return alert('Такой пользователь уже есть');
     }
     this.setState(prevState => {
-      const { name, number, contacts } = prevState;
+      const { contacts } = prevState;
 
       const newContact = {
         id: nanoid(),
@@ -68,14 +52,9 @@ class App extends Component {
       };
       return { contacts: [newContact, ...contacts] };
     });
-    this.reset();
   };
 
-  reset() {
-    this.setState({ ...INITIAL_STATE });
-  }
-
-  getFilterContact() {
+  getFilterContact = () => {
     const { filter, contacts } = this.state;
     if (!filter) {
       return contacts;
@@ -85,7 +64,7 @@ class App extends Component {
       return name.toLowerCase().includes(normalizedFilter);
     });
     return result;
-  }
+  };
 
   removeContact = id => {
     console.log(id);
@@ -95,43 +74,15 @@ class App extends Component {
     });
   };
   render() {
-    const { name, number } = this.state;
-    const { removeContact, handlefilterChange } = this;
-    const filterContacts = this.getFilterContact();
+    const { removeContact, handlefilterChange, addContact, getFilterContact } =
+      this;
+    const filterContacts = getFilterContact();
 
     return (
       <div style={styleApp}>
         <div className={css.wrapper}>
           <h2>Phonebook</h2>
-          <form onSubmit={this.addContact} className={css.form}>
-            <label>
-              <span>Name</span>
-              <input
-                onChange={this.handleClickChange}
-                type="text"
-                name="name"
-                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                required
-                value={name}
-                placeholder="Fedor Fedorov"
-              />
-            </label>
-            <label>
-              <span>Number</span>
-              <input
-                onChange={this.handleClickChange}
-                type="tel"
-                name="number"
-                value={number}
-                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                required
-                placeholder="227-91-26"
-              />
-            </label>
-            <button type="submit">Add contact</button>
-          </form>
+          <ContactsForm onSubmit={addContact} />
         </div>
         <div className={css.ListContact}>
           <h2>Contacts</h2>
