@@ -1,5 +1,11 @@
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 import css from './App.module.css';
+
+import ContactsList from './ContactsList/ContactList';
+import ContactFilter from './ContactFilter/ContactFilter';
+
+import contacts from './contacts';
 
 const INITIAL_STATE = {
   name: '',
@@ -18,12 +24,7 @@ const styleApp = {
 
 class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [...contacts],
     filter: '',
     name: '',
     number: '',
@@ -54,13 +55,14 @@ class App extends Component {
     e.preventDefault();
     const { name } = this.state;
     if (this.dublicate(name)) {
+      this.reset();
       return alert('Такой пользователь уже есть');
     }
     this.setState(prevState => {
       const { name, number, contacts } = prevState;
 
       const newContact = {
-        id: Math.random(),
+        id: nanoid(),
         name,
         number,
       };
@@ -85,23 +87,17 @@ class App extends Component {
     return result;
   }
 
-  removeContact(id) {
-    this.setState(({ contacts }) => ({
-      contacts: contacts.filter(contact => contact.id !== id),
-    }));
-  }
+  removeContact = id => {
+    console.log(id);
+    this.setState(({ contacts }) => {
+      const newContact = contacts.filter(contact => contact.id !== id);
+      return { contacts: newContact };
+    });
+  };
   render() {
-    const { contacts, name, number, filter } = this.state;
+    const { name, number } = this.state;
+    const { removeContact, handlefilterChange } = this;
     const filterContacts = this.getFilterContact();
-
-    const contact = filterContacts.map(({ id, name, number }) => (
-      <li key={id}>
-        {name}: {number}
-        <button onClick={() => this.removeContact(id)} type="button">
-          X
-        </button>
-      </li>
-    ));
 
     return (
       <div style={styleApp}>
@@ -139,13 +135,8 @@ class App extends Component {
         </div>
         <div className={css.ListContact}>
           <h2>Contacts</h2>
-          <input
-            onChange={this.handlefilterChange}
-            type="text"
-            name="filter"
-            value={filter}
-          />
-          <ul className="list">{contact}</ul>
+          <ContactFilter handlefilterChange={handlefilterChange} />
+          <ContactsList items={filterContacts} removeContact={removeContact} />
         </div>
       </div>
     );
