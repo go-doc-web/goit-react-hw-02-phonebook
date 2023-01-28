@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import ContactsList from './ContactsList/ContactList';
 import ContactFilter from './ContactFilter/ContactFilter';
 import ContactsForm from './ContactsForm/ContactsForm';
+import ContactItem from './ContactsList/ContactItem/ContactItem';
 
 import contacts from './contacts';
 
@@ -79,15 +80,25 @@ class App extends Component {
     const filterContacts = getFilterContact();
 
     return (
-      <div style={styleApp}>
-        <div className={css.wrapper}>
-          <h2>Phonebook</h2>
-          <ContactsForm onSubmit={addContact} />
+      <div style={styleApp} className={css.app}>
+        <div className={css.container}>
+          <div className={css.phonebook}>
+            <h2>Phonebook</h2>
+
+            <ContactsForm onSubmit={addContact} />
+          </div>
         </div>
-        <div className={css.ListContact}>
-          <h2>Contacts</h2>
-          <ContactFilter handlefilterChange={handlefilterChange} />
-          <ContactsList items={filterContacts} removeContact={removeContact} />
+        <div className={css.container}>
+          <div className={css.contacts}>
+            <h2>Contacts</h2>
+            <ContactFilter handlefilterChange={handlefilterChange} />
+            <ContactsList>
+              <ContactItem
+                items={filterContacts}
+                removeContact={removeContact}
+              />
+            </ContactsList>
+          </div>
         </div>
       </div>
     );

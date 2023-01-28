@@ -4,9 +4,14 @@ import css from './ContactFilter.module.css';
 
 const ContactFilter = ({ handlefilterChange }) => {
   return (
-    <div>
-      <label>Find contact by name</label>
-      <input onChange={handlefilterChange} type="text" name="filter" />
+    <div className="{css.wrapper}">
+      <label className={css.titleFilter}>*Find contact by name</label>
+      <input
+        onChange={handlefilterChange}
+        type="text"
+        name="filter"
+        placeholder="Find me"
+      />
     </div>
   );
 };

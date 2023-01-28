@@ -3,7 +3,7 @@ import { Component } from 'react';
 
 import initialState from './initialState';
 
-import css from './Contacts.module.css';
+import css from './ContactsForm.module.css';
 
 class ContactsForm extends Component {
   state = { ...initialState };
@@ -11,7 +11,7 @@ class ContactsForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { onSubmit } = this.props;
-    const result = onSubmit({ ...this.state });
+    onSubmit({ ...this.state });
     this.reset();
   };
 
@@ -33,7 +33,7 @@ class ContactsForm extends Component {
 
     return (
       <form onSubmit={handleSubmit} className={css.form}>
-        <label>
+        <label className={css.titleInputForm}>
           <span>Name</span>
           <input
             onChange={handleChange}
@@ -46,7 +46,7 @@ class ContactsForm extends Component {
             placeholder="Fedor Fedorov"
           />
         </label>
-        <label>
+        <label className={css.titleInputForm}>
           <span>Number</span>
           <input
             onChange={handleChange}

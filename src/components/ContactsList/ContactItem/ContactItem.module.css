@@ -1,0 +1,31 @@
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.item:last-child {
+  margin-bottom: 0;
+}
+
+.btnDelete {
+  display: block;
+  font-family: inherit;
+  width: 60px;
+  height: 28px;
+  outline: none;
+  border: 1px solid grey;
+  background-color: transparent;
+
+  cursor: pointer;
+
+  border-radius: 15px;
+  transition: background-color 250ms linear, color 250ms linear;
+}
+
+.btnDelete:hover,
+.btnDelete:focus {
+  background-color: red;
+  color: #fff;
+}

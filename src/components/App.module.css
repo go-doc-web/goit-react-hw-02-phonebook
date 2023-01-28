@@ -1,5 +1,29 @@
-label {
+.app {
+  /* max-width: 800px; */
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: baseline;
+  gap: 30px;
+}
+.container {
+  width: 600px;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.phonebook {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.contacts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
 }
