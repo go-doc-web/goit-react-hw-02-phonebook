@@ -78,6 +78,7 @@ class App extends Component {
     const { removeContact, handlefilterChange, addContact, getFilterContact } =
       this;
     const filterContacts = getFilterContact();
+    const { filter } = this.state;
 
     return (
       <div style={styleApp} className={css.app}>
@@ -91,7 +92,10 @@ class App extends Component {
         <div className={css.container}>
           <div className={css.contacts}>
             <h2>Contacts</h2>
-            <ContactFilter handlefilterChange={handlefilterChange} />
+            <ContactFilter
+              filter={filter}
+              handlefilterChange={handlefilterChange}
+            />
             <ContactsList>
               <ContactItem
                 items={filterContacts}
